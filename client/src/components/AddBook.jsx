@@ -1,13 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function AddBook() {
-    const navigate = useNavigate();
-    const handleAdd = () => {
-        navigate("/home")
-    };
-    const handleClose=()=>{
-        navigate(-1)
-  }
+  const navigate = useNavigate();
+  const [book, setBook] = useState({
+      bookName:"",
+      authorName:"",
+      bookPrice:""
+  });
+  const handleAdd = async (e) => {
+    e.preventDefault();
+    const { bookName, authorName, bookPrice } = book;
+    localStorage.setItem("books", JSON.stringify(book));
+    const {status, data } = await axios.post("/add/book", {
+        bookName,
+        authorName,
+        bookPrice
+    });
+    if (status) {
+      toast.success("Book Successfully Added", toastOptions);
+      navigate("/home");
+    } else {
+      toast.error("Something went wrong", toastOptions);
+    }
+  };
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 3000,
+    pauseOnHover: true,
+  };
+  const handleClose = () => {
+    navigate(-1);
+  };
+  const handleChange = (e) => {
+    e.preventDefault();
+    console.log(e.target);
+    setBook({ ...book, [e.target.name]: e.target.value });
+  };
   return (
     <div
       style={{
@@ -17,8 +49,8 @@ function AddBook() {
         justifyContent: "center",
         alignItems: "center",
         background: "rgba(0,0,0,0.7)",
-        position:"absolute",
-        top:"0"
+        position: "absolute",
+        top: "0",
       }}
     >
       <span
@@ -26,9 +58,9 @@ function AddBook() {
           position: "absolute",
           right: "2rem",
           top: "1.5rem",
-          fontSize:"30px",
-          color:"white",
-          cursor:"pointer"
+          fontSize: "30px",
+          color: "white",
+          cursor: "pointer",
         }}
         onClick={handleClose}
       >
@@ -54,8 +86,9 @@ function AddBook() {
               <input
                 type="text"
                 id="BookName"
-                name="BookName"
+                name="bookName"
                 className="form-control"
+                onChange={handleChange}
               />
             </div>
 
@@ -66,8 +99,9 @@ function AddBook() {
               <input
                 type="text"
                 id="AuthorName"
-                name="AuthorName"
+                name="authorName"
                 className="form-control"
+                onChange={handleChange}
               />
             </div>
 
@@ -78,7 +112,8 @@ function AddBook() {
               <input
                 type="text"
                 id="price"
-                name="price"
+                name="bookPrice"
+                onChange={handleChange}
                 className="form-control"
               />
             </div>
@@ -96,6 +131,7 @@ function AddBook() {
           </form>
         </div>
       </div>
+      <ToastContainer autoClose={3000} />
     </div>
   );
 }

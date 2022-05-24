@@ -4,6 +4,7 @@ require('dotenv/config')
 const app = exp()
 const {router} = require("./routes/api.routes") 
 // rVC8GkjoQHJmBjmz
+app.use(exp.json())
 app.use("/",router)
 app.listen(process.env.PORT,()=>{
     console.log("Connected at ",process.env.PORT)

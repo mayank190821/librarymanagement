@@ -55,5 +55,18 @@ const adminSchema = new mongoose.Schema({
         max: 50,
     },
 });
-
-module.exports = {user:mongoose.model("users",userSchema),admin:mongoose.model("admin",adminSchema)}
+const Books = new mongoose.Schema({
+    bookName:{
+        type:String,
+        max:50,
+    },
+    authorName:{
+        type:String,
+        max:50,
+    },
+    bookPrice:{
+        type:String,
+        max:50
+    }
+})
+module.exports = {User:mongoose.model("users",userSchema),admin:mongoose.model("admin",adminSchema),Books:mongoose.model('book',Books)}
