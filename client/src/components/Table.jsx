@@ -9,24 +9,24 @@ function Table() {
     }
     fetchData();
   }, []);
-  useEffect(() => {
-    async function fetchData() {
-      const { status, data } = await axios.get("/api/fetchbook");
-      setTableData(data.allBooks);
-    }
-    fetchData();
-  }, [tableData]);
-  const handleDelete = (e) => {
-    let dummy = tableData;
+  // useEffect(() => {
+  //     async function fetchData() {
+  //         const { status, data } = await axios.get("/api/fetchbook");
+  //         setTableData(data.allBooks);
+  //       }
+  //       fetchData();
+  //     }, [tableData]);
+
+  const handleDelete = async (e) => {
     let element = e.target.name;
-    for(let i=0;i<element;i++){
-      if(tableData.bookName === element){
-        continue;
-      }
-      console.log(element)
-      dummy.push(tableData[i])
-    }
-    setTableData(dummy);
+    await axios
+      .post("/delete/book", { element })
+      .then(async () => {
+        const { status, data } = await axios.get("/api/fetchbook");
+        if(status){
+          setTableData(data.allBooks);
+        }
+      });
   };
   const handleEdit = () => {};
   return (
@@ -59,9 +59,10 @@ function Table() {
                         background: "transparent",
                         height: "fitContent",
                         width: "fitContent",
+                        border: "none",
                       }}
                       onClick={handleEdit}
-                      name={ele.bookName}
+                      name={ele._id}
                     >
                       <i className="fas fa-pen" style={{ color: "black" }} />
                     </button>
@@ -70,10 +71,10 @@ function Table() {
                         background: "transparent",
                         height: "fitContent",
                         width: "fitContent",
-                        border:'none'
+                        border: "none",
                       }}
                       onClick={handleDelete}
-                      name={ele.bookName}
+                      name={ele._id}
                     >
                       <i class="fas fa-times" style={{ color: "red" }}></i>
                     </button>

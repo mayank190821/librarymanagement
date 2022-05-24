@@ -36,4 +36,5 @@ tr:nth-child(even) {
 }
 i{
   cursor: pointer;
+  pointer-events: none;
 }

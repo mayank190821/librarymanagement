@@ -7,22 +7,21 @@ import "react-toastify/dist/ReactToastify.css";
 function AddBook() {
   const navigate = useNavigate();
   const [book, setBook] = useState({
-      bookName:"",
-      authorName:"",
-      bookPrice:""
+    bookName: "",
+    authorName: "",
+    bookPrice: "",
   });
   const handleAdd = async (e) => {
     e.preventDefault();
     const { bookName, authorName, bookPrice } = book;
     localStorage.setItem("books", JSON.stringify(book));
-    const {status, data } = await axios.post("/add/book", {
-        bookName,
-        authorName,
-        bookPrice
+    const { data } = await axios.post("/add/book", {
+      bookName,
+      authorName,
+      bookPrice,
     });
-    if (status) {
+    if (data.status) {
       toast.success("Book Successfully Added", toastOptions);
-      navigate("/home");
     } else {
       toast.error("Something went wrong", toastOptions);
     }
@@ -33,11 +32,10 @@ function AddBook() {
     pauseOnHover: true,
   };
   const handleClose = () => {
-    navigate(-1);
+    navigate("/home");
   };
   const handleChange = (e) => {
     e.preventDefault();
-    console.log(e.target);
     setBook({ ...book, [e.target.name]: e.target.value });
   };
   return (
@@ -131,7 +129,7 @@ function AddBook() {
           </form>
         </div>
       </div>
-      <ToastContainer autoClose={3000} />
+      <ToastContainer autoClose={5000} />
     </div>
   );
 }

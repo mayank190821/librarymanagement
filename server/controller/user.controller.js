@@ -48,7 +48,6 @@ module.exports = {
   addBook: async (req, res, next) => {
     try {
       const { bookName, authorName, bookPrice } = req.body;
-      console.log(bookName)
       const book = await Books.create({
         bookName,
         authorName,
@@ -62,7 +61,6 @@ module.exports = {
   getBook: async (req, res) => {
     try {
         const allBooks = await Books.find({})
-        console.log(allBooks,"yha hu")
         return res.json({ status: true, allBooks });
       }
       catch(err){
@@ -70,8 +68,8 @@ module.exports = {
       }
   },
   deleteBook:async(req,res)=>{
-      const book = req.body
-    await Books.deleteOne({"bookName":book})
+      const bookId = req.body.element;
+    const data = await Books.findByIdAndDelete(bookId)
     return res.json({status: true})
   }
 };

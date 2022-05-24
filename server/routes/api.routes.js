@@ -1,5 +1,5 @@
 const exp = require('express')
-const { register,login, addBook,getBook } = require('../controller/user.controller')
+const { register,login, addBook,getBook, deleteBook } = require('../controller/user.controller')
 
 const router=exp()
 //register
@@ -8,4 +8,5 @@ router.post("/api/register",register)
 router.post("/api/login",login)
 router.post("/add/book",addBook)
 router.get("/api/fetchbook",getBook)
+router.post("/delete/book",deleteBook)
 module.exports={router}
