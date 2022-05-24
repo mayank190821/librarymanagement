@@ -30,7 +30,6 @@ module.exports = {
     try {
       const { username, password } = req.body;
       const user = await User.findOne({ username: username });
-      console.log(username)
       if (!user) {
         return res.json({ msg: "User not exist", status: false });
       }
