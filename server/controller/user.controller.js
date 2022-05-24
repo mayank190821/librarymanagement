@@ -63,10 +63,15 @@ module.exports = {
     try {
         const allBooks = await Books.find({})
         console.log(allBooks,"yha hu")
-        return res.json({ status: true,data: allBooks });
+        return res.json({ status: true, allBooks });
       }
       catch(err){
           console.log(err)
       }
   },
+  deleteBook:async(req,res)=>{
+      const book = req.body
+    await Books.deleteOne({"bookName":book})
+    return res.json({status: true})
+  }
 };

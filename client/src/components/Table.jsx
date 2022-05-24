@@ -4,12 +4,31 @@ function Table() {
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { data } = await axios.get("/api/fetchbook");
-      console.log(data);
-      setTableData(data);
+      const { status, data } = await axios.get("/api/fetchbook");
+      setTableData(data.allBooks);
     }
     fetchData();
   }, []);
+  useEffect(() => {
+    async function fetchData() {
+      const { status, data } = await axios.get("/api/fetchbook");
+      setTableData(data.allBooks);
+    }
+    fetchData();
+  }, [tableData]);
+  const handleDelete = (e) => {
+    let dummy = tableData;
+    let element = e.target.name;
+    for(let i=0;i<element;i++){
+      if(tableData.bookName === element){
+        continue;
+      }
+      console.log(element)
+      dummy.push(tableData[i])
+    }
+    setTableData(dummy);
+  };
+  const handleEdit = () => {};
   return (
     <>
       <div className="tableContainer">
@@ -24,28 +43,44 @@ function Table() {
             <th>Book Name</th>
             <th>Author</th>
             <th>Price</th>
+            <th></th>
           </tr>
           <tbody>
-            {tableData && tableData.length !== 0 ? (
-              <div>
-                {tableData.map((elem, indx) => {
-                  return (
-                    <tr>
-                      <td>{indx}</td>
-                      <td>{elem.bookName}</td>
-                      <td> {elem.authorName}</td>
-                      <td> {elem.bookPrice}</td>
-                      <td>
-                        <i className="fas fa-pen" />
-                        <i class="fas fa-times"></i>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </div>
-            ) : (
-              <tr />
-            )}
+            {tableData.map((ele, index) => {
+              return (
+                <tr>
+                  <td>{index + 1}</td>
+                  <td>{ele.bookName}</td>
+                  <td> {ele.authorName}</td>
+                  <td> {ele.bookPrice}</td>
+                  <td>
+                    <button
+                      style={{
+                        background: "transparent",
+                        height: "fitContent",
+                        width: "fitContent",
+                      }}
+                      onClick={handleEdit}
+                      name={ele.bookName}
+                    >
+                      <i className="fas fa-pen" style={{ color: "black" }} />
+                    </button>
+                    <button
+                      style={{
+                        background: "transparent",
+                        height: "fitContent",
+                        width: "fitContent",
+                        border:'none'
+                      }}
+                      onClick={handleDelete}
+                      name={ele.bookName}
+                    >
+                      <i class="fas fa-times" style={{ color: "red" }}></i>
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

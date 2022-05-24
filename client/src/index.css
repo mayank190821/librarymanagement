@@ -13,7 +13,6 @@ code {
 }
 .tableContainer {
   display: flex;
-  border: 1px solid red;
   height: fit-content;
   justify-content: center;
 }
@@ -24,10 +23,17 @@ table {
   border: "1px solid green";
   box-shadow: 0 0 10px 2px rgba(128, 128, 128, 0.329);
 }
-tr {
+tr,.Trows{
   text-align: center;
   height:30px;
 }
+.dataTable{
+  width: 100%;
+  border:1px solid red;
+}
 tr:nth-child(even) {
   background-color: rgba(128, 128, 128, 0.226);
+}
+i{
+  cursor: pointer;
 }
