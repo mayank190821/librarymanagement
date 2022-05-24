@@ -7,6 +7,7 @@ function Navbar() {
     localStorage.removeItem("user")
     navigate("/login")
   }
+  const username = localStorage.getItem("user")
   const image =
     "https://raw.githubusercontent.com/MartinHeinz/MartinHeinz/master/wave.gif";
   return (
@@ -17,7 +18,7 @@ function Navbar() {
           Hi,
           <img src={image} alt="hi" style={{ width: "30px" }} />
           <span style={{ fontSize: "20px" }} className="me-1 ms-1">
-            {/* <b>{{request.user.first_name}}</b> */}
+            <b>{username}</b>
           </span>
           <button
             className="logout ms-2 pe-2 pt-1 pb-1 ps-2"

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify'
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from 'axios'
+import axios from "axios";
 
 function Register() {
   function fin(e) {
@@ -15,46 +15,60 @@ function Register() {
     position: "bottom-right",
     autoClose: 5000,
     pauseOnHover: true,
-  }
+  };
   const [user, setUser] = useState({
     name: "",
     username: "",
     email: "",
     password: "",
+    confirmPassword:""
   });
   const navigate = useNavigate();
-  const handleChange=(e)=>{
-    console.log(e.target.name)
-    setUser({...user,[e.target.name]:e.target.value})
-  }
-  const reUser = /^[a-zA-Z0-9]+.{3,20}$/
-  let rePassword = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})')
+  const handleChange = (e) => {
+    console.log(e.target.name);
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
+  const reUser = /^[a-zA-Z0-9]+.{3,20}$/;
+  const reName = /^[a-zA-Z]+.{3,20}$/;
+  let rePassword = new RegExp(
+    "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})"
+  );
+
   const handleValidation = () => {
-    const { username, email, password, confirmPassword } =user;
+    const { name, username, email, password, confirmPassword } = user;
     if (password !== confirmPassword) {
+      console.log(user,"yha hu")
       toast.error("Password and confirm password should be same", toastOptions);
       return false;
-    }
-    else if (!rePassword.test(password)) {
-      toast.error("Must use A-Z, a-z, 0-9 and !@#$%^&*()", toastOptions)
-    }
-    else if (!reUser.test(username)) {
-      toast.error("Use correct Username.", toastOptions)
+    } else if (!rePassword.test(password)) {
+      toast.error("Must use A-Z, a-z, 0-9 and !@#$%^&*()", toastOptions);
+    } else if (!reUser.test(username)) {
+      toast.error("Use correct Username.", toastOptions);
+      return false;
+    } else if (!reName.test(name)) {
+      toast.error("Use correct name.", toastOptions);
       return false;
     }
     return true;
-  }
-  const handleSubmit=async (e)=>{
+  };
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if(handleValidation()){
-      const {name,username,email,password} = user;
-      const {data} = await axios.post("api/register",{
-        name,username,email,password
-      })
+    if (handleValidation()) {
+      const { name, username, email, password,confirmPassword } = user;
+      console.log(name,"is par");
+      const { data } = await axios.post("/api/register", {
+        name,
+        username,
+        email,
+        password,
+      });
+      console.log(data)
+      if(data.status){
+        localStorage.setItem("user", JSON.stringify(user));
+        navigate("/login");
+      }
     }
-    localStorage.setItem("user",JSON.stringify(user))
-    navigate("/login")
-  }
+  };
   return (
     <div
       style={{
@@ -69,7 +83,7 @@ function Register() {
       <div
         style={{
           padding: "1rem",
-          minWidth:"320px",
+          minWidth: "320px",
           width: "30vw",
           borderRadius: "15px",
           boxShadow: "rgb(153 153 153 / 50%) 0px 0px 9px 3px",
@@ -77,7 +91,7 @@ function Register() {
       >
         <div className="tab-pane active" id="pills-register">
           <h3 className="text-center">Register</h3>
-          <form >
+          <form>
             {/* <!-- Name input --> */}
             <div className="form-outline mb-3">
               <label className="form-label" htmlfor="name">
@@ -157,10 +171,11 @@ function Register() {
               </label>
               <input
                 type="password"
-                id="registerPassword"
+                id="password"
                 onFocus={fin}
                 onBlur={fout}
-                name="registerPassword"
+                name="password"
+                onChange={handleChange}
                 className="form-control"
                 required
               />
@@ -181,10 +196,11 @@ function Register() {
               </label>
               <input
                 type="password"
-                id="registerRepeatPassword"
+                id="confirmPassword"
                 onFocus={fin}
                 // onBlur={fout}
-                name="registerRepeatPassword"
+                name="confirmPassword"
+                onChange={handleChange}
                 className="form-control"
                 required
               />
@@ -200,7 +216,11 @@ function Register() {
 
             {/* <!-- Submit button --> */}
             <div className="d-flex justify-content-center">
-              <button type="submit" onClick={handleSubmit} className="btn btn-primary btn-block mb-3">
+              <button
+                type="submit"
+                onClick={handleSubmit}
+                className="btn btn-primary btn-block mb-3"
+              >
                 Sign up
               </button>
             </div>
@@ -213,6 +233,7 @@ function Register() {
           </form>
         </div>
       </div>
+      <ToastContainer autoClose={8000} />
     </div>
   );
 }
