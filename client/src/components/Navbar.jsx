@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ function Navbar() {
           Hi,
           <img src={image} alt="hi" style={{ width: "30px" }} />
           <span style={{ fontSize: "20px" }} className="me-1 ms-1">
-            <b>{username}</b>
+            <b>{JSON.parse(username).name}</b>
           </span>
           <button
             className="logout ms-2 pe-2 pt-1 pb-1 ps-2"

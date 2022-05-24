@@ -19,16 +19,22 @@ function Table() {
 
   const handleDelete = async (e) => {
     let element = e.target.name;
-    await axios
-      .post("/delete/book", { element })
-      .then(async () => {
-        const { status, data } = await axios.get("/api/fetchbook");
-        if(status){
-          setTableData(data.allBooks);
-        }
-      });
+    await axios.post("/delete/book", { element }).then(async () => {
+      const { status, data } = await axios.get("/api/fetchbook");
+      if (status) {
+        setTableData(data.allBooks);
+      }
+    });
   };
-  const handleEdit = () => {};
+  const handleEdit = async (e) => {
+    let element = e.target.name;
+    await axios.post("/update/book", { element }).then(async () => {
+      const { status, data } = await axios.get("/api/fetchbook");
+      if (status) {
+        setTableData(data.allBooks);
+      }
+    });
+  };
   return (
     <>
       <div className="tableContainer">
@@ -53,7 +59,9 @@ function Table() {
                   <td>{ele.bookName}</td>
                   <td> {ele.authorName}</td>
                   <td> {ele.bookPrice}</td>
-                  <td>
+                  {
+                    (JSON.parse( localStorage.getItem("user")).role === "admin")?
+                    <td>
                     <button
                       style={{
                         background: "transparent",
@@ -79,6 +87,10 @@ function Table() {
                       <i class="fas fa-times" style={{ color: "red" }}></i>
                     </button>
                   </td>
+                    :
+                    ""
+                  }
+                  
                 </tr>
               );
             })}

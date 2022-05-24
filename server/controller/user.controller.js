@@ -30,6 +30,7 @@ module.exports = {
     try {
       const { username, password } = req.body;
       const user = await User.findOne({ username: username });
+      console.log(username)
       if (!user) {
         return res.json({ msg: "User not exist", status: false });
       }
@@ -70,6 +71,11 @@ module.exports = {
   deleteBook:async(req,res)=>{
       const bookId = req.body.element;
     const data = await Books.findByIdAndDelete(bookId)
+    return res.json({status: true})
+  },
+  updateBook: async(e)=>{
+    const bookId = req.body;
+    // const data = await Books.findByIdAndUpdate()
     return res.json({status: true})
   }
 };

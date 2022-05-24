@@ -26,7 +26,6 @@ function Login() {
     }
   }, []);
   const handleValidation = (e) => {
-    e.preventDefault();
     const { username, password } = user;
     if (!rePassword.test(password)) {
       toast.error("Must use A-Z, a-z, 0-9 and !@#$%^&*()", toastOptions);
@@ -44,6 +43,7 @@ function Login() {
         username,
         password,
       });
+      console.log(data)
       if (data.status === false) {
         toast.error(data.msg, toastOptions);
       }
@@ -89,7 +89,7 @@ function Login() {
                 id="username"
                 name="username"
                 className="form-control"
-                onClick={handleChange}
+                onKeyUp={handleChange}
               />
             </div>
 
@@ -103,7 +103,7 @@ function Login() {
                 id="password"
                 name="password"
                 className="form-control"
-                onClick={handleChange}
+                onKeyUp={handleChange}
               />
             </div>
 
